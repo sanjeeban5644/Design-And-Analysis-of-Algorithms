@@ -1,181 +1,79 @@
 #include<stdio.h>
-#include<stdlib.h>
 
-void sortmaxprofit(int [],int [],int [],float [],int );
-void sortratio(float [],int [],int [],int [],int );
-float knapsack(int [],int [],int [],int ,int );
-void sortminweight(int [],int [],int [],float [],int );
+void sort(int [],int [],int [],int);
 
 int main(){
-    int n,i,limit;
-    char ch;
-    printf("\nEnter the total no.of items : ");
-    scanf("%d",&n);
-    printf("\nEnter the limit : ");
-    scanf("%d",&limit);
-    int profit[n],weight[n],id[n];
-    float ratio[n];
-    for(i=0;i<n;i++){
-        printf("\n\nEntry - %d",i+1);
-        printf("\nEnter the id : ");scanf("%d",&id[i]);
-        printf("\nEnter the profit : ");scanf("%d",&profit[i]);
-        printf("\nEnter the weight : ");scanf("%d",&weight[i]);
-        ratio[i] = (float)profit[i]/weight[i];
-    }
-    system("cls");
-    int choice=0;
-    while(choice<4){
-        system("cls");
-        printf("\n1-> Calculate Profit using maximum profit method");
-        printf("\n2-> Calculate Profit using minimum weight method");
-        printf("\n3-> Calculate Profit using ratio method");
-        printf("\n4-> Exit");
-        printf("\nEnter your choice : ");
-        scanf("%d",&choice);
-        switch(choice){
-            case 1: {
-                sortmaxprofit(profit,weight,id,ratio,n);
-				float ans = knapsack(profit,weight,id,limit,n);
-                printf("\nThe Total Profit is : %f",ans);
-                printf("\n\nPress 'y' to continue : ");
-                scanf(" %c",&ch);
-                break;
-            }
-            case 2: {
-            	sortminweight(weight,profit,id,ratio,n);
-            	float ans = knapsack(profit,weight,id,limit,n);
-            	printf("\nThe Total Profit is : %f",ans);
-                printf("\n\nPress 'y' to continue : ");
-                scanf(" %c",&ch);
-                break;
-            }
-            case 3: {
-            	sortratio(ratio,profit,weight,id,n);
-            	float ans = knapsack(profit,weight,id,limit,n);
-            	printf("\nThe Total Profit is : %f",ans);
-            	printf("\n\nPress 'y' to continue : ");
-            	scanf(" %c",&ch);
-                break;
-            }
-            default : {
-                printf("\nProgram ended!");printf("\nThankyou");
-                break;
-            }
-        }
-    }
-    return 0;
-
-}
-
-void sortminweight(int a[],int b[],int c[],float d[],int n){
-	int i,j,temp;
-	for(i=0;i<n-1;i++){
-		for(j=0;j<n-1-i;j++){
-			if(a[j]>a[j+1]){
-				
-				temp = a[j];
-                a[j]=a[j+1];
-                a[j+1]=temp;
-
-                temp = b[j];
-                b[j]=b[j+1];
-                b[j+1]=temp;
-
-                temp = c[j];
-                c[j]=c[j+1];
-                c[j+1]=temp;
-
-                temp = d[j];
-                d[j]=d[j+1];
-                d[j+1]=temp;
-			}
-		}
-	}
-}
-
-void sortmaxprofit(int a[],int b[],int c[],float d[],int n){
-    int i,j,temp;
-    for(i=0;i<n-1;i++){
-        for(j=0;j<n-1-i;j++){
-            if(a[j]<a[j+1]){
-
-                temp = a[j];
-                a[j]=a[j+1];
-                a[j+1]=temp;
-
-                temp = b[j];
-                b[j]=b[j+1];
-                b[j+1]=temp;
-
-                temp = c[j];
-                c[j]=c[j+1];
-                c[j+1]=temp;
-
-                temp = d[j];
-                d[j]=d[j+1];
-                d[j+1]=temp;
-            }
-        }
-    }
-
-}
-
-void sortratio(float a[],int b[],int c[],int d[],int n){
-	int i,j,temp;
-	for(i=0;i<n-1;i++){
-		for(j=0;j<n-1-i;j++){
-			if(a[j]<a[j+1]){
-
-				a[j]=a[j]+a[j+1];
-				a[j+1]=a[j]-a[j+1];
-				a[j]=a[j]-a[j+1];
-
-                temp = b[j];
-                b[j]=b[j+1];
-                b[j+1]=temp;
-
-                temp = c[j];
-                c[j]=c[j+1];
-                c[j+1]=temp;
-                
-                temp = d[j];
-                d[j]=d[j+1];
-                d[j+1]=temp;
-			}
-		}
-	}
-}
-
-float knapsack(int p[],int w[],int id[],int limit,int n){
-	int remaining_weight = limit,i=0,temp[n];
+	int i,n,maxdeadline = 0;
+	printf("\nEnter the total no.of jobs : ");
+	scanf("%d",&n);
+	int id[n],profit[n],deadline[n];
 	for(i=0;i<n;i++){
-		temp[i]=-1;
+		printf("\nJob -> %d\n",i+1);
+		printf("\nEnter the id : ");
+		scanf("%d",&id[i]);
+		printf("\nEnter the profit : ");
+		scanf("%d",&profit[i]);
+		printf("\nEnter the deadline : ");
+		scanf("%d",&deadline[i]);
+		if(deadline[i]>maxdeadline){
+			maxdeadline=deadline[i];
+		}
 	}
-	i=0;
-	float totprofit = 0.0;
-	while(remaining_weight!=0 && i<n){
-		if(remaining_weight-w[i]<0){
-			totprofit =  totprofit + (float)(p[i]*((float)remaining_weight)/w[i]);
-            remaining_weight=0;
+	
+	sort(id,profit,deadline,n);
+	
+	int totalslots[maxdeadline];
+	for(i=0;i<maxdeadline;i++){
+		totalslots[i]=-1;
+	}
+	int totprofit=0,totjob=0;
+	for(i=0;i<n;i++){
+		int p = deadline[i];
+		while(p>0){
+			if(totalslots[p-1]==-1){
+				totalslots[p-1]=id[i];
+				totprofit+=profit[i];
+				totjob+=1;
+				break;
+			}
+			else{
+				p--;
+			}
+		}
+		
+	}
+	printf("\n\nTotal Profit = %d",totprofit);
+	printf("\nTotal jobs done = %d",totjob);
+	printf("\nOrder of jobs : ");
+	for(i=0;i<maxdeadline;i++){
+		if(i==maxdeadline-1){
+			printf(" Job-%d.",totalslots[i]);
 		}else{
-			remaining_weight = remaining_weight-w[i];
-            totprofit = totprofit + p[i];
-		}
-		temp[i]=id[i];
-        i++;
-	}
-	
-	printf("Objects selected : ");
-	for(i=0;temp[i]!=-1;i++){
-		printf(" %d",temp[i]);
-		if(i==n-1){
-			break;
+			printf(" Job-%d -> ",totalslots[i]);
 		}
 	}
+	return 0;
+}
 
-	if(remaining_weight>0){
-		printf("\nLeft Over Space in Knapsack is : %d",remaining_weight);
+void sort(int id[],int profit[],int deadline[],int n){
+	int i,j;
+	for(i=0;i<n-1;i++){
+		for(j=0;j<n-i-1;j++){
+			if(profit[j]<profit[j+1]){
+				int temp;
+				temp = profit[j];
+				profit[j]=profit[j+1];
+				profit[j+1]=temp;
+				
+				temp = id[j];
+				id[j]=id[j+1];
+				id[j+1]=temp;
+				
+				temp = deadline[j];
+				deadline[j]=deadline[j+1];
+				deadline[j+1]=temp;
+				
+			}
+		}
 	}
-    return totprofit;
-	
 }
