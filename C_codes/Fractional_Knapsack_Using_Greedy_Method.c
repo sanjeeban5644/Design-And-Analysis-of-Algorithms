@@ -176,6 +176,5 @@ float knapsack(int p[],int w[],int id[],int limit,int n){
 	if(remaining_weight>0){
 		printf("\nLeft Over Space in Knapsack is : %d",remaining_weight);
 	}
-    return totprofit;
-	
+    return totprofit;	
 }
