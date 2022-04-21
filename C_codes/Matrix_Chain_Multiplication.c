@@ -22,7 +22,7 @@ int main(){
         }
     }
     printf("\nEnter the dimensions of the matrices : ");
-    for(i=0;i<=n;i++){
+    for(i=0;i<n;i++){
         printf("D%d - ",i);
         scanf("%d",&dimarray[i]);
     }
@@ -36,20 +36,20 @@ int main(){
     return 0;
 }
 
-// int matrix_chain_multiplication(int arr[],int i,int j){
-//     if(i==j){
-//         return 0;
-//     }
-//     int min = INF;
-//     int result,k;
-//     for(k=i;k<j;k++){
-//         result = matrix_chain_multiplication(arr,i,k)+matrix_chain_multiplication(arr,k+1,j)+(arr[i-1]*arr[k]*arr[j]);
-//         if(result<min){
-//             min = result;
-//         }
-//     }
-//     return min;
-// }
+ int matrix_chain_multiplication(int arr[],int i,int j){
+     if(i==j){
+         return 0;
+     }
+     int min = INF;
+     int result,k;
+     for(k=i;k<j;k++){
+         result = matrix_chain_multiplication(arr,i,k)+matrix_chain_multiplication(arr,k+1,j)+(arr[i-1]*arr[k]*arr[j]);
+         if(result<min){
+             min = result;
+         }
+     }
+     return min;
+ }
 
 
 void print_optimal(int i,int j){
