@@ -1,55 +1,53 @@
 #include<stdio.h>
 #include<math.h>
 
-int board[20][20];
-
-int queen(int ,int ); 
-
-int main()
-{
- int n,i,j;
- //void queen(int row,int n);
- 
- printf(" - N Queens Problem Using Backtracking -");
- printf("\n\nEnter number of Queens:");
- scanf("%d",&n);
- int board[n][n];
- int ans = queen(1,n);
- return 0;
+int a[30],count=0;
+int place(int pos) {
+	int i;
+	for (i=1;i<pos;i++) {
+		if((a[i]==a[pos])||((abs(a[i]-a[pos])==abs(i-pos))))
+		   return 0;
+	}
+	return 1;
 }
-
- 
-int place(int row,int column)
-{
- int i;
- for(i=1;i<=row-1;++i)
- {
-  //checking column and digonal conflicts
-  if(board[i]==column)
-   return 0;
-  else
-   if(abs(board[i]-column)==abs(i-row))
-    return 0;
- }
- return 1; 
+void print_sol(int n) {
+	int i,j;
+	count++;
+	printf("\nSolution #%d:\n",count);
+	for (i=1;i<=n;i++) {
+		for (j=1;j<=n;j++) {
+			if(a[i]==j)
+			    printf(" %d",j); 
+		}
+	}
 }
- 
-
-int queen(int row,int n)
-{
-  int col;
- if(row==n){
-   return 1;
- }
- for(col=0;col<n;col++){
-   if(place(row,col)){
-     board[row][col]=1;
-     if(queen(row,row+1)){
-       return 1;
-     }
-     board[row][col]=0;
-   }
- }
- return 0;
+void queen(int n) {
+	int k=1;
+	a[k]=0;
+	while(k!=0) {
+		a[k]=a[k]+1;
+		while((a[k]<=n)&&!place(k)){ 
+        a[k]++;
+    }
+		if(a[k]<=n) {
+			if(k==n){
+        print_sol(n);
+      }
+			else {
+				k++;
+				a[k]=0;
+			}
+		} 
+    else{
+      k--;
+    } 
+	}
 }
-
+int main() {
+	int i,n;
+	printf("\nEnter the number of Queens : ");
+	scanf("%d",&n);
+	queen(n);
+	printf("\n\nTotal solutions = %d",count);
+	return 0;
+}
