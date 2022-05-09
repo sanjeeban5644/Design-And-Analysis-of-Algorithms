@@ -1,114 +1,83 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-struct queue{
-    int data;
-    struct queue *next;
-}*front=NULL,*rear=NULL;
+struct node{
+	int data;
+	struct node* next;
+}*front=NULL,*rear=NULL,*temp;
 
-void enqueue(int );
-int dequeue();
+void enqueue(int data){
+	struct node* newnode = (struct node*)malloc(sizeof(struct node));
+	newnode->data=data;
+	newnode->next=NULL;
+	if(front==NULL){
+		front=newnode;
+		rear=newnode;
+	}
+	else{
+		rear->next=newnode;
+		rear=newnode;
+	}
+}
+
+int dequeue(){
+	temp=front;
+	front=front->next;
+	temp->next=NULL;
+	return temp->data;
+}
+
 
 int main(){
-    int n;    
-    printf("\nEnter the number of vertices : ");
-    scanf("%d",&n);
-    int arr[n][n];
-    char vertex_name[n];
-    printf("\nEnter the names of the vertices");
-    int i,j;
-    for(i=0;i<n;i++){ 
-        printf("\nEnter the name of vertex %d : ",i+1);
-        scanf(" %c",&vertex_name[i]);
-    }
-    for(i=0;i<n;i++){
-        for(j=0;j<n;j++){
-            if(i==j){
-                arr[i][j]=0;
-            }
-            else{
-                arr[i][j]=-1;
-            }
-        }
-    }
-    int t;
-    char answer;
-    for(t=0;t<n;t++){
-        printf("\n--Considering Vertex %c--",vertex_name[t]);
-        char ch = vertex_name[t];
-        for(i=0;i<n;i++){
-            if(ch!=vertex_name[i] && arr[t][i]==-1){
-                printf("\nIs '%c' and '%c' connected?",ch,vertex_name[i]);
-                scanf(" %c",&answer);
-                if(answer=='y'){
-                    arr[t][i]=1;
-                    arr[i][t]=1;
-            }
-                else{
-                    arr[t][i]=0;
-                    arr[i][t]=0;
-                }
-            }
-        }
-    }
-    printf("\nThe Adjacency Matrix for the Graph is : \n");
-    for(i=0;i<n;i++){
-        for(j=0;j<n;j++){
-            printf(" %d",arr[i][j]);
-        }
-        printf("\n");
-    }
-    char ch;
-    printf("\nEnter the starting vertex : ");
-    scanf(" %c",&ch);
-    int visited[n];
-    for(t=0;t<n;t++){
-        if(vertex_name[t]==ch){
-            break;
-        }
-    }
-    for(i=0;i<n;i++){
-        visited[i]=0;
-    }
-    printf("\n\nThe BFS Traversal of the Graph is : ");
-    printf(" %c",vertex_name[t]);
-    enqueue(t);
-    visited[t]=1;
-    while(1){
-        if(front==NULL){
-            printf("\nProgram Ended");
-            break;
-        }
-        int first = dequeue();
-        for(j=0;j<n;j++){
-            if(arr[first][j]==1 && visited[j]==0){
-                printf(" %c",vertex_name[j]);
-                visited[j]=1;
-                enqueue(j);
-            }
-        }
-    }
-return 0;
-}
-void enqueue(int value){
-    struct queue *new = (struct queue*)malloc(sizeof(struct queue));
-    new->data=value;
-    new->next=NULL;
-    if(front==NULL || rear==NULL){
-        front = new;
-        rear = new;
-    }
-    else{
-        rear->next=new;
-        rear=new;
-    }
-}
-int dequeue(){
-    struct queue* temp;
-    if(front!=NULL){
-        temp = front;
-        front = front->next;
-
-    }
-    return temp->data;
+	int vertex,edges,i,j,a,b;
+	printf("\nEnter the no.of vertices : ");
+	scanf("%d",&vertex);
+	printf("\nEnter the no.of edges : ");
+	scanf("%d",&edges);
+	int arr[vertex+1][vertex+1];
+	for(i=1;i<=vertex;i++){
+		for(j=1;j<=vertex;j++){
+			arr[i][j]=0;
+		}
+	}
+	printf("\nEnter the vertices and edges in order : \n");
+	for(i=1;i<=edges;i++){
+		scanf("%d%d",&a,&b);
+		arr[a][b]=1;
+		arr[b][a]=1;
+	}
+	printf("\nPrinting the Adjacency Matrix : \n");
+	for(i=1;i<=vertex;i++){
+		for(j=1;j<=vertex;j++){
+			printf(" %d",arr[i][j]);
+		}
+		printf("\n");
+	}
+	int start;
+	printf("\nEnter the starting vertex : ");
+	scanf("%d",&start);
+	int visited[vertex+1];
+	for(i=1;i<=vertex;i++){
+		visited[i]=0;
+	}
+	visited[start]=1;
+	printf(" %d",start);
+	enqueue(start);
+	while(1){
+		if(front==NULL){
+			break;
+		}
+		int top = dequeue();
+		for(i=1;i<=vertex;i++){
+			if(arr[top][i]==1 && visited[i]==0){
+				printf(" %d",i);
+				enqueue(i);
+				visited[i]=1;
+				arr[top][i]=0;
+				arr[i][top]=0;
+			}
+		}
+	}
+	
+	return 0;
 }

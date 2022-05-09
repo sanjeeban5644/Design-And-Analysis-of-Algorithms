@@ -1,53 +1,59 @@
 #include<stdio.h>
-#include<math.h>
 
-int a[30],count=0;
-int place(int pos) {
-	int i;
-	for (i=1;i<pos;i++) {
-		if((a[i]==a[pos])||((abs(a[i]-a[pos])==abs(i-pos))))
-		   return 0;
+void queen(int ,int ,int []);
+int place(int ,int ,int []);
+void print(int ,int[]);
+
+int count=1;
+
+int main(){
+	int n;
+	printf("\nEnter the total no.of queens : ");
+	scanf("%d",&n);
+	int board[n];
+	if(n<=3){
+		printf("\nYou Fool!");
+		return 0;
 	}
-	return 1;
+	queen(1,n,board);
+	return 0;
 }
-void print_sol(int n) {
-	int i,j;
-	count++;
-	printf("\nSolution #%d:\n",count);
-	for (i=1;i<=n;i++) {
-		for (j=1;j<=n;j++) {
-			if(a[i]==j)
-			    printf(" %d",j); 
+
+void queen(int row,int n,int board[]){
+	int col;
+	for(col=1;col<=n;col++){
+		if(place(row,col,board)){
+			board[row]=col;
+			if(row==n){
+				print(n,board);
+			}else{
+				queen(row+1,n,board);
+			}
 		}
 	}
 }
-void queen(int n) {
-	int k=1;
-	a[k]=0;
-	while(k!=0) {
-		a[k]=a[k]+1;
-		while((a[k]<=n)&&!place(k)){ 
-        a[k]++;
-    }
-		if(a[k]<=n) {
-			if(k==n){
-        print_sol(n);
-      }
-			else {
-				k++;
-				a[k]=0;
-			}
-		} 
-    else{
-      k--;
-    } 
+
+int place(int row,int col,int board[]){
+	int i;
+	for(i=1;i<=row-1;i++){
+		if(board[i]==col){
+			return 0;
+		}
+		if(abs(board[i]-col)==abs(i-row)){
+			return 0;
+		}
 	}
+	return 1;
 }
-int main() {
-	int i,n;
-	printf("\nEnter the number of Queens : ");
-	scanf("%d",&n);
-	queen(n);
-	printf("\n\nTotal solutions = %d",count);
-	return 0;
+
+void print(int n,int board[]){
+	int i,j;
+	printf("\nSolution %d : ",count++);
+	for(i=1;i<=n;i++){
+		for(j=1;j<=n;j++){
+			if(board[i]==j){
+				printf(" %d",j);
+			}
+		}
+	}
 }

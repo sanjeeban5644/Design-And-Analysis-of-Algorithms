@@ -1,113 +1,84 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-int isempty_stack();
-void push(int );
-int pop();
-void display();
-
 struct node{
-    int data;
-    struct node *next;
+	int data;
+	struct node* next;
 }*top=NULL,*temp;
 
-int main(){
-    int edges,vertices,i,j,row,col,ele;
-    printf("\nEnter the number of vertices : ");
-    scanf("%d",&vertices);
-    printf("\nEnter the number of edges : ");
-    scanf("%d",&edges);
-    int arr[vertices+1][vertices+1];
-    int a[vertices+1];
-    for(i=1;i<=vertices;i++){
-        for(j=1;j<=vertices;j++){
-            arr[i][j]=0;
-        }
-    }
-    printf("\nEnter the edges with connections : ");
-    for(i=1;i<=edges;i++){
-        scanf("%d%d",&row,&col); 
-        arr[row][col]=1;
-        arr[col][row]=1;
-    }
-    for(i=1;i<=vertices;i++){
-        for(j=1;j<=vertices;j++){
-            printf(" %d",arr[i][j]);
-        }
-        printf("\n");
-    }
-    for(i=1;i<=vertices;i++){
-        a[i]=0;
-    }
-    printf("\nEnter the starting node : ");
-    scanf("%d",&ele);
-    
-    push(ele);
-    //display();
-        while(isempty_stack())
-        {    
-                ele = pop();
-                if(a[ele]==0)
-                {
-                        printf("%d ",ele);
-                        a[ele]=1;
-                }
-                for(i=1; i<=vertices; i++)
-                {
-                        if(arr[ele][i]==1 && a[i]==0)
-                                push(i);
-                }
-        }
-    
-
-
-    //printf("\nh");
-
-    return 0;
-}
-
-int isempty_stack(){
-    if(top==NULL){
-        return 0;
-    }else{
-        return 1;
-    }
-}
-
-void push(int ele){
-    struct node *newnode = (struct node *)malloc(sizeof(struct node));
-    if(top==NULL){
-        newnode->data=ele;
-        newnode->next=NULL;
-        top=newnode;
-    }else{
-        newnode->data=ele;
-        newnode->next=top;
-        top=newnode;
-    }
+void push(int data){
+	struct node* newnode = (struct node*)malloc(sizeof(struct node));
+	newnode->data=data;
+	newnode->next=NULL;
+	if(top==NULL){
+		top=newnode;
+	}
+	else{
+		newnode->next=top;
+		top=newnode;
+	}
 }
 
 int pop(){
-    int ele;
-    if(top!=NULL){
-        temp=top;
-        ele=top->data;
-        top=top->next;
-        temp->next=NULL;
-        free(temp);
-    }
-    return ele;
+	temp=top;
+	top=top->next;
+	temp->next=NULL;
+	return temp->data;
 }
 
-void display(){
-    if(top==NULL){
-        printf("\ntt");
-    }
-    else{
-        temp=top;
-        while(temp!=NULL){
-            printf(" %d",temp->data);
-            temp=temp->next;
-        }
-    }
+int main(){
+	int vertex,edges,i,j,a,b,start;
+	printf("\nEnter the total no.of vertices : ");
+	scanf("%d",&vertex);
+	printf("\nEnter the total no.of edges : ");
+	scanf("%d",&edges);
+	int arr[vertex+1][vertex+1];
+	for(i=1;i<=vertex;i++){
+		for(j=1;j<=vertex;j++){
+			arr[i][j]=0;
+		}
+	}
+	printf("\nEnter the vertices and edges in order : \n");
+	for(i=1;i<=edges;i++){
+		scanf("%d%d",&a,&b);
+		arr[a][b]=1;
+		arr[b][a]=1;
+	}
+	printf("\nPrinting the Adjacency Matrix : \n");
+	for(i=1;i<=vertex;i++){
+		for(j=1;j<=vertex;j++){
+			printf(" %d",arr[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\nEnter the starting vertex : ");
+	scanf("%d",&start);
+	printf("\nThe DFS Traversal is : ");
+	push(start);
+	int visited[vertex+1];
+	for(i=1;i<=vertex;i++){
+		visited[i]=0;
+	}
+	visited[start]=1;
+	while(1){
+		if(top==NULL){
+			break;
+		}
+		int start = pop();
+		if(visited[start]==1){
+			printf(" %d",start);
+		}
+		for(i=1;i<=vertex;i++){
+			if(arr[start][i]==1 && visited[i]==0){
+				
+				push(i);
+				visited[i]=1;
+				arr[start][i]=0;
+				arr[i][start]=0;
+			}
+		}
+	}
+	return 0;
+
 }
+
