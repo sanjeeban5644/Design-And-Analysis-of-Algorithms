@@ -1,39 +1,72 @@
 #include<stdio.h>
 
-#define INFY 1000
 
 int main(){
-    int v,e,i,j,srcvertex;
-    printf("\nEnter the no.of vertex : ");
-    scanf("%d",&v);
-    printf("\nEnter the no.of edges : ");
-    scanf("%d",&e);
-    int distance[v];//,src[e],dest[e],cost[e];
-    int src[] = {0,1,1,1,2,3,4,4,3,5,6};
-    int dest[] = {0,2,3,4,5,2,3,6,5,7,7};
-    int cost[] = {0,6,5,5,-1,-2,-2,-1,1,3,3};
-    printf("\nEnter the total source, destination and cost of the arrays : \n");
-    // for(i=1;i<=e;i++){
-    //     scanf("%d%d%d",&src[i],&dest[i],&cost[i]);
-    // }
-    for(i=0;i<=v;i++){
-        distance[i]=INFY;
-    }
-    printf("\nEnter the source vertex : ");
-    scanf("%d",&srcvertex);
-    distance[srcvertex]=0;
+	int vertices,edges,i,j;
+	printf("\nEnter the total no.of vertices : ");
+	scanf("%d",&vertices);
+	printf("\nEnter the total no.of edges : ");
+	scanf("%d",&edges);
+	int mat[vertices+1][vertices+1];
+	int source[edges+1],dest[edges+1],cost[edges+1],dist[vertices+1];
+	for(i=1;i<=vertices;i++){
+		dist[i]=9999;
+	}
+	printf("\nEnter the edges and cost in order : ");
+	for(i=1;i<=edges;i++){
+		int a,b,c;
+		scanf("%d%d%d",&a,&b,&c);
+		source[i]=a;
+		dest[i]=b;
+		cost[i]=c;
+	}
+//	printf("\nSource array : ");
+//	for(i=1;i<=edges;i++){
+//		printf(" %d",source[i]);
+//	}
+//	printf("\ndestination array : ");
+//	for(i=1;i<=edges;i++){
+//		printf(" %d",dest[i]);
+//	}
+//	printf("\ncost array : ");
+//	for(i=1;i<=edges;i++){
+//		printf(" %d",cost[i]);
+//	}
+//	printf("\ndistance array : ");
+//	for(i=1;i<=vertices;i++){
+//		printf(" %d",dist[i]);
+//	}
+	int src;
+	printf("\nEnter the source vertex : ");
+	scanf("%d",&src);
+	dist[src]=0;
+	int c = 1;
+	for(i=1;i<vertices;i++){
+		for(j=1;j<=edges;j++){
+			if(dist[source[j]]+cost[j]<dist[dest[j]]){
+				dist[dest[j]]=dist[source[j]]+cost[j];
+			}
+		}
+		int k;
+		for(k=1;k<=vertices;k++){
+			mat[c][k]=dist[k];
+			
+		}
+		c++;
+	}
+	
+	printf("\n");
+	for(i=1;i<=vertices;i++){
+		for(j=1;j<=vertices;j++){
+			printf(" %d",mat[i][j]);
+		}
+		printf("\n");
+	}
+	
 
-    for(i=1;i<=(v-1);i++){
-        for(j=1;j<=e;j++){
-            int k = dest[j];
-            if(distance[j]+cost[j]<distance[k]){
-                distance[k]=distance[j]+cost[j];
-            }
-        }
-    }
-    printf("\n\n");
-    for(i=1;i<=v;i++){
-        printf(" %d",distance[i]);
-    }
-    return 0;
+	
+	for(i=1;i<=vertices;i++){
+		printf(" \n%d -> %d ",i,dist[i]);
+	}
+	return 0;
 }
