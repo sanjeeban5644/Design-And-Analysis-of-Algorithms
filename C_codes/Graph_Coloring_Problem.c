@@ -1,91 +1,68 @@
 #include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
 
-#define v 5
+int g[20][20],arr[20],vertex,m,count;
 
-bool isSafe(int,int [v][v],int [],int );
-
-
-bool graphcolor(int arr[v][v],int tot_color,int color[],int index){
-        if(index>v){
-            return true;
-        }
-        int i;
-        for(i=1;i<=tot_color+1;i++){
-            if(isSafe(index,arr,color,i)){
-                color[index]=i;
-
-            if(graphcolor(arr,tot_color,color,index+1)==true){
-                return true;    
-            }
-             color[index]=0;
-           
-            }
-           
-        }
-        return false;
-}
-
-
-
-
-
-
-bool isSafe(int index,int arr[v][v],int color[],int i){
-    int j;
-    for(j=1;j<=v;j++){
-        if(arr[index][j] && i == color[j]){
-            return false;
-        }
-    }
-    return true;
-}
+void gcolor(int );
+void next(int );
 
 int main(){
-    int total_vertex,total_edges,i,a,b,j,tot_color;
-    
-    printf("\nEnter the total number of vertices : ");
-    scanf("%d",&total_vertex);
-    printf("\nEnter the total number of edges : ");
-    scanf("%d",&total_edges);
-    int arr[total_vertex+1][total_vertex+1];
-    for(i=1;i<=total_vertex;i++){
-        for(j=1;j<=total_vertex;j++){
-            arr[i][j]=0;
-
-        }
-    }
-    printf("\nEnter the vertices and edges in order : \n");
-    for(i=0;i<total_edges;i++){
-        scanf("%d%d",&a,&b);
-        arr[a][b]=1;
-        arr[b][a]=1; 
-    }
-    printf("\nPrinting the Adjacency Matrix\n");
-    for(i=1;i<=total_vertex;i++){
-        for(j=1;j<=total_vertex;j++){
-            printf(" %d",arr[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\nEnter the number of colors : ");
-    scanf("%d",&tot_color);
-    int color[total_vertex+1];
-    for(i=1;i<=total_vertex;i++){
-        color[i]=0;
-        }
-    if(graphcolor(arr,tot_color,color,1)==false){
-            printf("\nNo Solution Exists");
-            return false;
-        }
-    
-    printf("\n\n\n");
-    for(i=1;i<=total_vertex;i++){
-        printf(" %d",color[i]);
-    }
-
-    return 0;
+	int edge,i,j,a,b;
+	printf("\nEnter the no.of vertices : ");
+	scanf("%d",&vertex);
+	printf("\nEnter the no.of edges : ");
+	scanf("%d",&edge);
+	printf("\nEnter the edges : ");
+	for(i=1;i<=vertex;i++){
+		for(j=1;j<=vertex;j++){
+			g[i][j]=0;
+		}
+	}
+	for(i=1;i<=edge;i++){
+		scanf("%d%d",&a,&b);
+		g[a][b]=1;
+		g[b][a]=1;
+	}
+	
+	printf("\nEnter the no.of colors : ");
+	scanf("%d",&m);
+	gcolor(1);
+	printf("\nTotal Solutions are : %d",count);
+	return 0;
 }
 
+void gcolor(int k){
+	int i;
+	while(1){
+		next(k);
+		if(arr[k]==0){
+			return ;
+		}
+		if(k==vertex){
+			for(i=1;i<=vertex;i++){
+				printf(" %d",arr[i]);
+			}
+			count++;
+			printf("\n");
+		}else{
+			gcolor(k+1);
+		}
+	}
+}
 
+void next(int k){
+	int j;
+	while(1){
+		arr[k]=(arr[k]+1)%(m+1);
+		if(arr[k]==0){
+			return;
+		}
+		for(j=1;j<=vertex;j++){
+			if(g[k][j]==1 && arr[j]==arr[k]){
+				break;
+			}
+		}
+		if(j==(vertex+1)){
+			return ;
+		}
+	}
+}
