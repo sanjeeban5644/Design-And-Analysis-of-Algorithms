@@ -26,26 +26,34 @@ int main(){
 }
 
 void quicksort(int arr[],int lb,int ub){
-    int t;
     if(lb<ub){
-        t = partition(arr,lb,ub);
+        int t = partition(arr,lb,ub);
         quicksort(arr,lb,t-1);
         quicksort(arr,t+1,ub);
     }
 }
 
 int partition(int arr[],int lb,int ub){
-    int pivot = arr[ub];
-    int i=(lb-1),j;
-    for(j=lb;j<ub;j++){
-        if(arr[j]<=pivot){
-            i++;
-            swap(&arr[i],&arr[j]);
+    int start = lb;
+    int end = ub;
+    int pivot = arr[lb];
+    while(start<end){
+        while(arr[start]<=pivot){
+            start++;
+        }
+        while(arr[end]>pivot){
+            end--;
+        }
+        if(start<end){
+            swap(&arr[start],&arr[end]);
         }
     }
-    swap(&arr[i+1],&arr[ub]);
-    return (i+1);
+    swap(&arr[lb],&arr[end]);
+    return end;
 }
+
+
+
 
 void swap(int *a,int *b){
     int temp = *a;
