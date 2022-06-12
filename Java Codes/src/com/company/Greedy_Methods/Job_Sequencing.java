@@ -81,7 +81,7 @@ public class Job_Sequencing {
         in.close();
     }
 
-    public static void sort(int[] id,int[] profit,int[] dl,int n){
+    private static void sort(int[] id,int[] profit,int[] dl,int n){
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n-1-i; j++) {
                 if(profit[j]<profit[j+1]){
