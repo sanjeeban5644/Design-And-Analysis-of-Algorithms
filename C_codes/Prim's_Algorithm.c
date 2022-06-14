@@ -1,11 +1,10 @@
-
 #include<stdio.h>
 
-#define INFY 9999
+#define INFY 9999;
 
 int main(){
-	int vertex,edges,i,j,k,a,b,count=1,min,totcost=0,u,v,q,w,t;
-	printf("\nEnter the no.of vertices : ");
+	int vertex,edge,i,j,a,b,u,v,c,min,totcost=0,count=1;
+	printf("\nEnter the total vertices : ");
 	scanf("%d",&vertex);
 	int mat[vertex+1][vertex+1];
 	for(i=1;i<=vertex;i++){
@@ -13,36 +12,28 @@ int main(){
 			mat[i][j]=INFY;
 		}
 	}
-	printf("\nEnter the no.of edges : ");
-	scanf("%d",&edges);
-	printf("\nTake input : ");
-	for(i=1;i<=edges;i++){
-		scanf("%d%d%d",&q,&w,&t);
-		mat[q][w]=t;
-		mat[w][q]=t;
+	printf("\nEnter the total edges : ");
+	scanf("%d",&edge);
+	printf("\nEnter the edges and cost in order : ");
+	for(i=0;i<edge;i++){
+		scanf("%d%d%d",&a,&b,&c);
+		mat[a][b]=c;
 	}
-	for(i=1;i<=vertex;i++){
- 		for(j=1;j<=vertex;j++){
- 			printf(" %d",mat[i][j]);
-		 }
-		 printf("\n");
-	 }
-	
 	int visited[vertex+1];
 	for(i=1;i<=vertex;i++){
 		visited[i]=0;
 	}
-	printf("\nEnter the starting vertex : ");
-	int start;
-	scanf("%d",&start);
-	visited[start]=1;
+	//selecting the 1st vertex as the starting vertex. 
+	//You can change it as you wish.
+	visited[1]=1;
 	
 	while(count<vertex){
-		for(i=1,min=INFY;i<=vertex;i++){
+		for(i=1;i<=vertex;i++){
+			min=INFY;
 			for(j=1;j<=vertex;j++){
 				if(mat[i][j]<min){
 					if(visited[i]!=0){
-						min = mat[i][j];
+						min=mat[i][j];
 						a=u=i;
 						b=v=j;
 					}
@@ -53,11 +44,11 @@ int main(){
 					}
 				}
 			}
-			mat[a][b]=mat[b][a]=INFY;
 		}
-	}	
+		mat[a][b]=mat[b][a]=INFY;
+	}
 	
-	printf("\nTotal cost is : %d",totcost);
+	printf("\nThe total cost is : %d",totcost);
 	return 0;
-	
 }
+
