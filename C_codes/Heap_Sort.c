@@ -1,73 +1,60 @@
-//INCORRECT CODE
-//CODE NOT WORKING
-//CODE ON REVIEW...UPDATED CODE COMING SOON
-
-
 #include<stdio.h>
 
-void printarray(int [],int );
 void heapsort(int [],int );
-void maxheapify(int [],int ,int );
+void heapify(int[] ,int ,int );
 void swap(int *,int *);
-void printarray(int [],int );
 
 int main(){
-    int n;
-    printf("\nEnter the total elements of the array : ");
-    scanf("%d",&n);
-    int arr[n],i;
-    printf("\nEnter the elements of the array : ");
-    for(i=0;i<n;i++){
-        printf("\nEnter the element [%d] : ",i);
-        scanf("%d",&arr[i]);
-    }
-    printf("\nThe Entered array is : ");
-    printarray(arr,n);
-
-    printf("\nThe Sorted array is : ");
-    heapsort(arr,n);
-    printarray(arr,n);
-
-    return 0;
+	int n,i;
+	printf("\nEnter the total no.of elements of the array : ");
+	scanf("%d",&n);
+	int arr[n];
+	printf("\nEnter the elements : ");
+	for(i=0;i<n;i++){
+		scanf("%d",&arr[i]);
+	}
+	printf("\nThe Entered array is : ");
+	for(i=0;i<n;i++){
+		printf(" %d",arr[i]);
+	}
+	printf("\nThe Sorted array is : ");
+	heapsort(arr,n);
+	for(i=0;i<n;i++){
+		printf(" %d",arr[i]);
+	}
+	return 0;
 }
 
 void heapsort(int arr[],int n){
-    int i;
-    for(i=n/2;i>=1;i--){
-        maxheapify(arr,n,i);
-    }
-    for(i=n;i>=1;i--){
-        swap(&arr[1],&arr[i]);
-        maxheapify(arr,n,1);
-    }
+	int i;
+	for(i=(n/2)-1;i>=0;i--){
+		heapify(arr,n,i);
+	}
+	for(i=n-1;i>=0;i--){
+		swap(&arr[0],&arr[i]);
+		heapify(arr,i,0);
+	}
 }
 
-void maxheapify(int arr[],int n,int i){
-    int largest = i;
-    int l=(2*i);
-    int r=(2*i)+1;
-
-    while(l<=n && arr[l]>arr[largest]){
-        largest=l;
-    }
-    while(l<=n && arr[r]>arr[largest]){
-        largest=r;
-    }
-    if(largest!=i){
-        swap(&arr[largest],&arr[i]);
-        maxheapify(arr,n,largest);
-    }
+void heapify(int arr[],int n,int i){
+	int lar = i;
+	int left = (2*i)+1;
+	int right = (2*i)+2;
+	if(left<n && arr[left]>arr[lar]){
+		lar = left;
+	}
+	if(right<n && arr[right]>arr[lar]){
+		lar = right;
+	}
+	if(lar!=i){
+		swap(&arr[lar],&arr[i]);
+		heapify(arr,n,lar);
+	}
 }
+
 
 void swap(int *a,int *b){
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void printarray(int arr[],int n){
-    int i;
-    for(i=0;i<n;i++){
-        printf(" %d",arr[i]);
-    }
+	int temp = *a;
+	*a = *b;
+	*b = temp;
 }
